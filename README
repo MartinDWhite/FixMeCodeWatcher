@@ -1,0 +1,6 @@
+This is a little C# GUI utility to list all lines like "//FIXME" in a directory recursively and watch for changes to refresh the list. 
+I use it to show a running list of things that are needed in the code I am working on. 
+
+Put a directory name in the textbox at the top and the tool will find and show all the line with //fixme in .cs and .java file recursively. 
+It remembers the directory name between runs by saving it in the registry. 
+

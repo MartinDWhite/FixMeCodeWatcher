@@ -246,11 +246,13 @@ namespace FixMeCodeWatcher
             {
                 if (fmf.FixMe.Count > 0)
                 {
-                    sb.AppendLine(fmf.filename.Substring(textBoxDirectory.Text.Length));
+                    // remove the duplicated part of the full path to the file
+                    sb.AppendLine(fmf.filename.Substring(textBoxDirectory.Text.Length +1));
                     foreach (FixMeFile.LineRef lr in fmf.FixMe)
                     {
                         sb.AppendLine("   " + lr.line_number + ":" + lr.line);
                     }
+                    sb.AppendLine();
                 }
             }
             textBoxOutput.Text = sb.ToString();
