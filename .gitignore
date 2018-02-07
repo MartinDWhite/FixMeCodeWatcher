@@ -1,0 +1,11 @@
+**/bin/Release
+**/bin/Debug
+**/bin/x64/Release
+**/bin/x64/Debug
+**/bin/x86/Release
+**/bin/x86/Debug
+**/obj/
+**.vspx
+**.vsp
+**.suo
+*/UpgradeLog.htm
