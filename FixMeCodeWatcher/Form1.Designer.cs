@@ -33,6 +33,8 @@
             this.buttonDirectoryPicker = new System.Windows.Forms.Button();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.timerReload = new System.Windows.Forms.Timer(this.components);
+            this.checkBoxFixMe = new System.Windows.Forms.CheckBox();
+            this.checkBoxToDo = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxDirectory
@@ -61,11 +63,11 @@
             this.textBoxOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxOutput.Location = new System.Drawing.Point(0, 26);
+            this.textBoxOutput.Location = new System.Drawing.Point(0, 53);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxOutput.Size = new System.Drawing.Size(379, 428);
+            this.textBoxOutput.Size = new System.Drawing.Size(379, 401);
             this.textBoxOutput.TabIndex = 2;
             // 
             // timerReload
@@ -74,11 +76,35 @@
             this.timerReload.Interval = 1000;
             this.timerReload.Tick += new System.EventHandler(this.timerReload_Tick);
             // 
+            // checkBoxFixMe
+            // 
+            this.checkBoxFixMe.AutoSize = true;
+            this.checkBoxFixMe.Location = new System.Drawing.Point(12, 29);
+            this.checkBoxFixMe.Name = "checkBoxFixMe";
+            this.checkBoxFixMe.Size = new System.Drawing.Size(68, 18);
+            this.checkBoxFixMe.TabIndex = 3;
+            this.checkBoxFixMe.Text = "FixMe(s)";
+            this.checkBoxFixMe.UseVisualStyleBackColor = true;
+            this.checkBoxFixMe.CheckedChanged += new System.EventHandler(this.checkBoxFixMe_CheckedChanged);
+            // 
+            // checkBoxToDo
+            // 
+            this.checkBoxToDo.AutoSize = true;
+            this.checkBoxToDo.Location = new System.Drawing.Point(86, 29);
+            this.checkBoxToDo.Name = "checkBoxToDo";
+            this.checkBoxToDo.Size = new System.Drawing.Size(64, 18);
+            this.checkBoxToDo.TabIndex = 4;
+            this.checkBoxToDo.Text = "ToDo(s)";
+            this.checkBoxToDo.UseVisualStyleBackColor = true;
+            this.checkBoxToDo.CheckedChanged += new System.EventHandler(this.checkBoxToDo_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 453);
+            this.Controls.Add(this.checkBoxToDo);
+            this.Controls.Add(this.checkBoxFixMe);
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.buttonDirectoryPicker);
             this.Controls.Add(this.textBoxDirectory);
@@ -97,6 +123,8 @@
         private System.Windows.Forms.Button buttonDirectoryPicker;
         private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Timer timerReload;
+        private System.Windows.Forms.CheckBox checkBoxFixMe;
+        private System.Windows.Forms.CheckBox checkBoxToDo;
     }
 }
 

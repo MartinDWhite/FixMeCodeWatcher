@@ -124,9 +124,14 @@ namespace FixMeCodeWatcher
         {
             string dir = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "directory", "").ToString();
             if (dir != "")
-            {
                 textBoxDirectory.Text = dir;
-            }           
+            string fixme = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "todo", "1").ToString();
+            if (fixme == "1")
+                checkBoxToDo.Checked = true;
+            string todo = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "fixme", "1").ToString();
+            if (todo == "1")
+                checkBoxFixMe.Checked = true;
+
         }
 
         void LoadDirectory(string dirname)
@@ -143,9 +148,10 @@ namespace FixMeCodeWatcher
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (textBoxDirectory.Text != "")
-            {
                 Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "directory", textBoxDirectory.Text);
-            }
+            Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "todo", checkBoxToDo.Checked ? "1" : "0");
+            Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Software\McCrawCorp\FixMeCodeWatcher", "fixme", checkBoxFixMe.Checked ? "1" : "0");
+
         }
 
         public class FixMeFile
@@ -157,6 +163,7 @@ namespace FixMeCodeWatcher
             }
             public string filename = "";
             public List<LineRef> FixMe = new List<LineRef>();
+            public List<LineRef> ToDo = new List<LineRef>();
 
             public FixMeFile(string filename)
             {
@@ -164,6 +171,7 @@ namespace FixMeCodeWatcher
             }
 
             static Regex FixMeRegex = new Regex(@".*(//\s*[Ff][Ii][Xx][Mm][Ee].*)");
+            static Regex ToDoRegex = new Regex(@".*(//\s*[Tt][Oo][Dd][Oo].*)");
             public void LoadFile(string filename)
             {
                 this.filename = filename;
@@ -179,9 +187,10 @@ namespace FixMeCodeWatcher
                         string line = sr.ReadLine();
                         Match m = FixMeRegex.Match(line);
                         if (m.Success)
-                        {
                             FixMe.Add(new FixMeFile.LineRef() { line_number = line_number, line = m.Groups[1].Value });
-                        }
+                        m = ToDoRegex.Match(line);
+                        if (m.Success)
+                            ToDo.Add(new FixMeFile.LineRef() { line_number = line_number, line = m.Groups[1].Value });
                     }
                 } 
                 catch (Exception e)
@@ -244,13 +253,19 @@ namespace FixMeCodeWatcher
             StringBuilder sb = new StringBuilder();
             foreach (FixMeFile fmf in FixMes)
             {
-                if (fmf.FixMe.Count > 0)
+                if ((checkBoxFixMe.Checked && fmf.FixMe.Count > 0) || (checkBoxToDo.Checked && fmf.ToDo.Count > 0))
                 {
                     // remove the duplicated part of the full path to the file
-                    sb.AppendLine(fmf.filename.Substring(textBoxDirectory.Text.Length +1));
-                    foreach (FixMeFile.LineRef lr in fmf.FixMe)
+                    sb.AppendLine(fmf.filename.Substring(textBoxDirectory.Text.Length + 1));
+                    if (checkBoxFixMe.Checked && fmf.FixMe.Count > 0)
                     {
-                        sb.AppendLine("   " + lr.line_number + ":" + lr.line);
+                        foreach (FixMeFile.LineRef lr in fmf.FixMe)
+                            sb.AppendLine("   " + lr.line_number + ":" + lr.line);
+                    }
+                    if (checkBoxToDo.Checked && fmf.ToDo.Count > 0)
+                    {
+                        foreach (FixMeFile.LineRef lr in fmf.ToDo)
+                            sb.AppendLine("   " + lr.line_number + ":" + lr.line);
                     }
                     sb.AppendLine();
                 }
@@ -258,5 +273,14 @@ namespace FixMeCodeWatcher
             textBoxOutput.Text = sb.ToString();
         }
 
+        private void checkBoxFixMe_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void checkBoxToDo_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
     }
 }
